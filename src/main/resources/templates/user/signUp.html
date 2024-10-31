@@ -50,6 +50,48 @@ layout:decorate="~{layout/defaultLayout}">
 	
 <th:block layout:fragment="script">
 	<script>
+		$(document).ready(function() {
+			// 중복확인
+			$("#loginIdCheckBtn").on("click", function() {
+				// 문구들 안 보이게 초기화 
+				$("#idCheckLength").addClass("d-none");
+				$("#idCheckDuplicated").addClass("d-none");
+				$("#idCheckOk").addClass("d-none");
+				
+				//alert("중복확인");
+				let loginId = $("input[name=loginId]").val().trim();
+				
+				// validation
+				if (loginId.length < 4) {
+					$("#idCheckLength").removeClass("d-none");
+					return;
+				}
+				
+				// AJAX 
+				$.ajax({
+					// request
+					// type 생략하면 GET 요청
+					url:"/user/is-duplicate-id"
+					, data:{"loginId":loginId}
+					
+					// response
+					, success:function(data) {
+						if (data.code == 200) {
+							if (data.is_duplicate_id) {
+								// 중복
+								$("#idCheckDuplicated").removeClass("d-none");
+							} else {
+								// 사용 가능
+								$("#idCheckOk").removeClass("d-none");
+							}
+						}
+					}
+					, error:function(e) {
+						alert("중복확인에 실패했습니다.");
+					}
+				});
+			});
+		});
 	</script>
 </th:block>
 </html>
