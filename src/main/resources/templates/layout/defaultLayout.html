@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html 
+lang="ko"
+xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- head에 대한 config(조각) -->
+<th:block th:replace="fragments/config :: configFragment"></th:block>
+<body>
+	<div id="wrap">
+		<!-- header(조각) -->
+		<th:block th:replace="fragments/header :: headerFragment"></th:block>
+		
+		<!-- section(교체되는 내용) -->
+		<th:block layout:fragment="content"></th:block>
+		
+		<!-- footer(조각) -->
+		<th:block th:replace="fragments/footer :: footerFragment"></th:block>
+	</div>
+</body>
+</html>
