@@ -56,11 +56,17 @@ public class UserRestController {
 		String hashedPassword = EncryptUtils.md5(password);
 		
 		// db insert
+		UserEntity user = userBO.addUser(loginId, hashedPassword, name, email);
 		
 		// 응답값
 		Map<String, Object> result = new HashMap<>();
-		result.put("code", 200);
-		result.put("result", "성공");
+		if (user != null) {
+			result.put("code", 200);
+			result.put("result", "성공");
+		} else {
+			result.put("code", 500);
+			result.put("error_message", "회원가입에 실패했습니다.");
+		}
 		return result;
 	}
 	
