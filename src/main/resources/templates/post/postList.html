@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-50">
+		<h1>글 목록</h1>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>제목</th>
+					<th>생성일</th>
+					<th>수정일</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="post : ${postList}">
+					<td th:text="${post.id}">[[${post}]]</td>
+					<td>
+						<!-- <a th:href="@{/post/post-detail-view(postId=${post.id}, userId=13)}" th:text="${post.subject}"></a> -->
+						<a th:href="|/post/post-detail-view?postId=${post.id}|" th:text="${post.subject}"></a>
+					</td>
+					<td th:text="${#temporals.format(post.createdAt, 'yyyy년 M월 d일 HH:mm:ss')}"></td>
+					<td th:text="${#temporals.format(post.updatedAt, 'yyyy년 M월 d일 HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<!-- 글쓰기 버튼 영역 -->
+		<div class="d-flex justify-content-end">
+			<a href="/post/post-create-view" class="btn btn-warning">글쓰기</a>
+		</div>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+
+    </script>
+</th:block>

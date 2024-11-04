@@ -29,6 +29,11 @@ public class UserController {
 		return "user/signIn";
 	}
 	
+	/**
+	 * 로그아웃
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/sign-out")
 	public String signOut(HttpSession session) {
 		// session을 비운다.
