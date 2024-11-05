@@ -61,7 +61,7 @@
 				// 이미지 업로드 시 form 태그 필요
 				// form를 js에서 만든다.
 				let formData = new FormData();
-				formData.append("subject", subject);
+				formData.append("subject", subject); // key는 form의 name과 같음 - request param명
 				formData.append("content", content);
 				
 				// AJAX
@@ -70,9 +70,23 @@
 					type:"POST"
 					, url:"/post/create"
 					, data:formData
-					
+					, processData:false   // 파일업로드 필수 설정
+					, contentType:false   // 파일업로드 필수 설정
+					, enctype:"multipart/form-data" // 파일업로드 필수 설정
 					
 					// response
+					, success:function(data) {
+						// 성공일 때 alert => 목록 화면
+						if (data.code == 200) {
+							alert("메모가 저장되었습니다.");
+							location.href = "/post/post-list-view";
+						} else {
+							alert(data.error_message);
+						}
+					}
+					, error:function(e) {
+						alert("글을 저장하는데 실패했습니다.");
+					}
 				});
 			});
 		});
