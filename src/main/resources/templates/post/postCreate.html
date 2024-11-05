@@ -11,7 +11,7 @@
 		<textarea id="content" rows="10" class="form-control" placeholder="내용을 입력하세요"></textarea>
 		
 		<div class="d-flex justify-content-end my-3">
-			<input type="file" id="file">
+			<input type="file" id="file" accept=".jpg, .png, .gif">
 		</div>
 		
 		<div class="d-flex justify-content-between">
@@ -44,6 +44,7 @@
 				//alert("글 저장");
 				let subject = $("#subject").val().trim();
 				let content = $("#content").val().trim();
+				let fileName = $("#file").val(); // C:\fakepath\sun-3275314_1280.jpg
 				
 				if (!subject) {
 					alert("제목을 입력하세요.");
@@ -55,6 +56,20 @@
 					return;
 				}
 				
+				// 파일명이 있으면 확장자 체크
+				if (fileName) {
+					//alert("파일이 있다.");
+					// C:\fakepath\sun-3275314_1280.jpg
+					let extension = fileName.split(".").pop().toLowerCase();
+					//console.log(extension);
+					
+					if ($.inArray(extension, ["jpg", "png", "gif"]) == -1) {
+						alert("이미지 파일만 업로드 할 수 있습니다.");
+						$("#file").val(""); // 파일을 비운다.
+						return;
+					}
+				}
+				
 				console.log(subject);
 				console.log(content);
 				
@@ -63,6 +78,7 @@
 				let formData = new FormData();
 				formData.append("subject", subject); // key는 form의 name과 같음 - request param명
 				formData.append("content", content);
+				formData.append("file", $("#file")[0].files[0]);
 				
 				// AJAX
 				$.ajax({

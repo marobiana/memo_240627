@@ -19,16 +19,22 @@ public class PostBO {
 		return postMapper.selectPostListByUserId(userId);
 	}
 	
-	// input: userId, subject, content, file
+	// input: userId, userLoginId, subject, content, file
 	// output: int(성공한 행 개수)
 	public int addPost(int userId, 
-			String subject, String content, MultipartFile file) {
+			String userLoginId, String subject, 
+			String content, MultipartFile file) {
 		
 		String imagePath = null;
 		
-		// TODO file to imagePath
+		// file to imagePath
+		// file이 있을 때만 업로드 => imagePath를 얻어냄
+		if (file != null) {
+			
+		}
 		
-		return postMapper.insertPost(userId, subject, content, imagePath);
+		return 0;
+		//return postMapper.insertPost(userId, subject, content, imagePath);
 	}
 }
 
