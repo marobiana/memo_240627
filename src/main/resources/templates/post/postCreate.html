@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-50">
+		<h1>글쓰기</h1>
+		
+		<input type="text" id="subject" class="form-control" placeholder="제목을 입력하세요">
+		<textarea id="content" rows="10" class="form-control" placeholder="내용을 입력하세요"></textarea>
+		
+		<div class="d-flex justify-content-end my-3">
+			<input type="file" id="file">
+		</div>
+		
+		<div class="d-flex justify-content-between">
+			<button type="button" id="postListBtn" class="btn btn-dark">목록</button>
+			<div>
+				<button type="button" id="clearBtn" class="btn btn-secondary">모두지우기</button>
+				<button type="button" id="saveBtn" class="btn btn-warning">저장</button>
+			</div>
+		</div>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+		$(document).ready(function() {
+			// 목록 버튼 클릭 => 목록 화면 이동
+			$("#postListBtn").on('click', function() {
+				location.href = "/post/post-list-view";
+			});
+			
+			// 모두 지우기
+			$("#clearBtn").on('click', function() {
+				//alert("모두 지우기");
+				$("#subject").val("");
+				$("#content").val(""); // textarea는 val()로
+			});
+			
+			// 글 저장
+			$("#saveBtn").on("click", function() {
+				//alert("글 저장");
+				let subject = $("#subject").val().trim();
+				let content = $("#content").val().trim();
+				
+				if (!subject) {
+					alert("제목을 입력하세요.");
+					return;
+				}
+				
+				if (!content) {
+					alert("내용을 입력하세요.");
+					return;
+				}
+				
+				console.log(subject);
+				console.log(content);
+				
+				// 이미지 업로드 시 form 태그 필요
+				// form를 js에서 만든다.
+				let formData = new FormData();
+				formData.append("subject", subject);
+				formData.append("content", content);
+				
+				// AJAX
+				$.ajax({
+					// request
+					type:"POST"
+					, url:"/post/create"
+					, data:formData
+					
+					
+					// response
+				});
+			});
+		});
+    </script>
+</th:block>
+
+
+
+
+

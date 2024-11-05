@@ -37,6 +37,18 @@ public class PostController {
 		
 		return "post/postList";
 	}
+	
+	/**
+	 * 글쓰기 화면
+	 * @return
+	 */
+	@GetMapping("/post-create-view")
+	public String postCreateView() {
+		return "post/postCreate";
+	}
 }
+
+
+
 
 
