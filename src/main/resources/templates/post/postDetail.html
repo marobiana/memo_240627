@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-50 py-4">
+		<h1>글 상세</h1>
+		<input type="text" id="subject" class="form-control" placeholder="제목을 입력하세요" th:value="${post.subject}">
+		<textarea id="content" rows="10" class="form-control" placeholder="내용을 입력하세요" th:text="${post.content}"></textarea>
+		
+		<!-- 이미지 영역: 이미지가 있을 때에만 -->
+		<div class="my-3" th:if="${post.imagePath != null}">
+			<img th:src="${post.imagePath}" alt="본문 이미지" width="300">
+		</div>
+		
+		<div class="d-flex justify-content-end my-3">
+			<input type="file" id="file" accept=".jpg, .png, .gif">
+		</div>
+		
+		<div class="d-flex justify-content-between">
+			<button type="button" id="delBtn" class="btn btn-secondary">삭제</button>
+			<div>
+				<a class="btn btn-dark" href="/post/post-list-view">목록</a>
+				<button type="button" id="saveBtn" class="btn btn-warning">수정</button>
+			</div>
+		</div>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+
+    </script>
+</th:block>
