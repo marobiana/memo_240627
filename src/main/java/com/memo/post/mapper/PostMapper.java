@@ -36,6 +36,10 @@ public interface PostMapper {
 			@Param("subject") String subject,
 			@Param("content") String content,
 			@Param("imagePath") String imagePath);
+	
+	// input: postId
+	// output: int(삭제된 행 개수)
+	public int deletePostByPostId(int postId);
 }
 
 
