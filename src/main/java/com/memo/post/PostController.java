@@ -22,7 +22,10 @@ public class PostController {
 	private PostBO postBO;
 
 	@GetMapping("/post-list-view")
-	public String postListView(Model model, HttpSession session) {
+	public String postListView(
+			@RequestParam(value = "prevId", required = false) Integer prevIdParam,
+			@RequestParam(value = "nextId", required = false) Integer nextIdParam,
+			Model model, HttpSession session) {
 		// 로그인 여부 확인(권한 검사)
 		Integer userId = (Integer)session.getAttribute("userId");
 		if (userId == null) {
@@ -31,9 +34,18 @@ public class PostController {
 		}
 		
 		// db select => 로그인 된 사람이 쓴 글
-		List<Post> postList = postBO.getPostListByUserId(userId);
-				
+		List<Post> postList = postBO.getPostListByUserId(userId, prevIdParam, nextIdParam);
+		int prevId = 0;
+		int nextId = 0;
+		
+		if (postList.isEmpty() == false) { // postList가 비어있지 않을 때 페이징 정보 세팅
+			nextId = postList.get(postList.size() - 1).getId(); // 마지막칸 id
+			prevId = postList.get(0).getId(); // 첫번째칸 id
+		}
+		
 		// model 담기
+		model.addAttribute("nextId", nextId);
+		model.addAttribute("prevId", prevId);
 		model.addAttribute("postList", postList);
 		
 		return "post/postList";

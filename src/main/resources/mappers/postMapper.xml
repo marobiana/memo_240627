@@ -10,7 +10,7 @@
 			`post`
 	</select>
 	
-	<select id="selectPostListByUserId" parameterType="int" resultType="com.memo.post.domain.Post">
+	<select id="selectPostListByUserId" parameterType="map" resultType="com.memo.post.domain.Post">
 		SELECT
 			`id`
 			,`userId`
@@ -23,6 +23,8 @@
 			`post`
 		WHERE
 			`userId` = #{userId}
+		ORDER BY `id` DESC
+		LIMIT ${limit}
 	</select>
 	
 	<insert id="insertPost" parameterType="map">

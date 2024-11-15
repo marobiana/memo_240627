@@ -24,8 +24,33 @@ public class PostBO {
 	@Autowired
 	private FileManagerService fileManager;
 	
-	public List<Post> getPostListByUserId(int userId) {
-		return postMapper.selectPostListByUserId(userId);
+	// 페이징 정보 필드(limit)
+	private static final int POST_MAX_SIZE = 3;
+	
+	public List<Post> getPostListByUserId(int userId, Integer prevId, Integer nextId) {
+		// 게시글 번호: 10 9 8 | 7 6 5 | 4 3 2 | 1
+		// 만약 4 3 2 페이지에 있을 때
+		// 1) 다음(nextId가 있음): 2보다 작은 3개 desc 
+		// 2) 이전(prevId가 있음): 4보다 큰 3개 asc => 5 6 7 => BO에서 리스트 reverse
+		// 3) 페이징 없음(next, prevId 모두 없음): 최신순 3개 desc
+		
+		// xml에서 하나의 쿼리로 만들기 위해 변수를 정제해본다.
+		Integer standardId = null; // 기준 id(prev or next)
+		String direction = null; // 방향
+		
+		if (prevId != null) { // 2) 이전
+			standardId = prevId;
+			direction = "prev";
+			
+			// TODO
+		} else if (nextId != null) { // 1) 다음
+			standardId = nextId;
+			direction = "next";
+			// TODO
+		}
+		
+		// 3) 페이징 없음
+		return postMapper.selectPostListByUserId(userId, standardId, direction, POST_MAX_SIZE);
 	}
 	
 	// input: userId, userLoginId, subject, content, file
