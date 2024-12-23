@@ -24,7 +24,7 @@ public class UserRestController {
 	private UserBO userBO;
 
 	/**
-	 * 아이디 중복확인   sdfs
+	 * 아이디 중복확인   sdfs  sdfsd
 	 * @param loginId
 	 * @return
 	 */
