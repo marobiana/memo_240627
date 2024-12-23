@@ -1,13 +1,15 @@
 server:
   port: 8080
 spring:
+  config:
+    import: classpath:security-variable.yml
   thymeleaf:
     cache: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/memo_240627?characterEncoding=UTF-8
     username: root
-    password: root
+    password: ${mysql.password}
   jpa:
     show-sql: true
     hibernate:
