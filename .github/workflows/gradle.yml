@@ -1,9 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+# Java CI with Gradle & YAML Secrets
 
 name: Java CI with Gradle
 
@@ -21,33 +16,42 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
+    # YAML 파일 생성 단계 추가
+    - name: Create security-variable.yml
+      run: |
+        echo "${{ secrets.SECURITY-VARIABLE }}" > ./src/main/resources/security-variable.yml
+
+    # Gradle Build
     - name: Build with Gradle
       run: |
         chmod +x gradlew
-        ./gradlew build -x test     # jar 만들기
+        ./gradlew build -x test
 
-    - name: Docker build      # 이미지 생성 및 docker hub push
+    # Docker Build & Push
+    - name: Docker build and push
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp .   # 뒤에는 도커허브에 올린 이미지명
-        docker push ${{ secrets.DOCKER_USERNAME }}/myapp # 뒤에는 도커허브에 올린 이미지명
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp .
+        docker push ${{ secrets.DOCKER_USERNAME }}/myapp
 
-    - name: Deploy                # AWS에서 할 docker hub pull, docker compose 실행
+    # Deploy to Server
+    - name: Deploy
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }} # EC2 인스턴스 퍼블릭 DNS
+        host: ${{ secrets.HOST }}
         username: ec2-user
-        key: ${{ secrets.PRIVATE_KEY }} # pem 키
-        # 도커 작업
+        key: ${{ secrets.PRIVATE_KEY }}
         script: |
-         sudo docker rm -f $(docker ps -qa)    # 기존 이미지 삭제 후 다시 받음
-         sudo docker pull ${{ secrets.DOCKER_USERNAME }}/myapp  # 뒤에는 도커허브에 올린 이미지명
-         docker-compose up -d
-         docker image prune -f
+          sudo docker rm -f $(docker ps -qa)
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/myapp
+          docker-compose up -d
+          docker image prune -f
