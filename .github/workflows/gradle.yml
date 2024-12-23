@@ -28,7 +28,7 @@ jobs:
     # YAML 파일 생성 단계 추가
     - name: Create security-variable.yml
       run: |
-        echo "${{ secrets.SECURITY-VARIABLE }}" > ./src/main/resources/security-variable.yml
+        echo "${{ secrets.SECURITY_VARIABLE }}" > ./src/main/resources/security-variable.yml
 
     # Gradle Build
     - name: Build with Gradle
